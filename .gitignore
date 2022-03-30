@@ -104,3 +104,6 @@ jspm_packages
 
 # My Personal Template files
 .sample*
+
+# sqlite memory file
+memory
