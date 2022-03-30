@@ -1,13 +1,13 @@
 'use strict';
 
-process.env.SECRET = 'toes';
+const SECRET = process.env.SECRET || 'toes';
 
 const middleware = require('../../../src/auth/middleware/bearer.js');
 const { users } = require('../../../src/auth/models/index.js');
 const jwt = require('jsonwebtoken');
 
 let userInfo = {
-  admin: { username: 'admin', password: 'password' },
+  admin: { username: 'admin-basic', password: 'password' },
 };
 
 // Pre-load our database with fake users
@@ -44,8 +44,8 @@ describe('Auth Middleware', () => {
 
     it('logs in a user with a proper token', () => {
 
-      const user = { username: 'admin' };
-      const token = jwt.sign(user, process.env.SECRET);
+      const user = { username: 'admin-basic' };
+      const token = jwt.sign(user, SECRET);
 
       req.headers = {
         authorization: `Bearer ${token}`,
