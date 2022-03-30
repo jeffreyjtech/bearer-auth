@@ -1,10 +1,10 @@
 'use strict';
 
-process.env.SECRET = "toes";
+process.env.SECRET = 'toes';
 
 const middleware = require('../../../src/auth/middleware/bearer.js');
 const { users } = require('../../../src/auth/models/index.js');
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
 
 let userInfo = {
   admin: { username: 'admin', password: 'password' },
@@ -22,8 +22,8 @@ describe('Auth Middleware', () => {
   const req = {};
   const res = {
     status: jest.fn(() => res),
-    send: jest.fn(() => res)
-  }
+    send: jest.fn(() => res),
+  };
   const next = jest.fn();
 
   describe('user authentication', () => {
@@ -31,7 +31,7 @@ describe('Auth Middleware', () => {
     it('fails a login for a user (admin) with an incorrect token', () => {
 
       req.headers = {
-        authorization: 'Bearer thisisabadtoken',
+        authorization: 'Bearer badToken',
       };
 
       return middleware(req, res, next)
