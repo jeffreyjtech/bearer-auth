@@ -1,6 +1,6 @@
 'use strict';
 
-const SECRET = process.env.SECRET || 'toes';
+process.env.SECRET = 'toes';
 
 const middleware = require('../../../src/auth/middleware/bearer.js');
 const { users } = require('../../../src/auth/models/index.js');
@@ -45,7 +45,7 @@ describe('Auth Middleware', () => {
     it('logs in a user with a proper token', () => {
 
       const user = {username: userInfo.admin.username};
-      const token = jwt.sign(user, SECRET);
+      const token = jwt.sign(user, process.env.SECRET);
 
       req.headers = {
         authorization: `Bearer ${token}`,
