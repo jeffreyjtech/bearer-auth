@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "jeff",
+    "password": null,
+    "database": "bearer-auth-development",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "jeff",
+    "password": null,
+    "database": "bearer-auth-test",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "jeff",
+    "password": null,
+    "database": "bearer-auth-production",
+    "host": "127.0.0.1",
+    "dialect": "postgres"
+  }
+}
