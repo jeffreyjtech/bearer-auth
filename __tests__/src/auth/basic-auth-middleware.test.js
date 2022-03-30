@@ -3,9 +3,13 @@
 const middleware = require('../../../src/auth/middleware/basic.js');
 const { users } = require('../../../src/auth/models/index.js');
 
+const base64 = require('base-64');
+
 let userInfo = {
   admin: { username: 'admin-basic', password: 'password' },
 };
+
+let authString = `${userInfo.admin.username}:${userInfo.admin.password}`;
 
 // Pre-load our database with fake users
 beforeAll(async (done) => {
@@ -28,11 +32,11 @@ describe('Auth Middleware', () => {
 
   describe('user authentication', () => {
 
-    it('fails a login for a user (admin) with the incorrect basic credentials', () => {
+    it('fails a login for a user (admin) with the incorrect basic credentials', async () => {
 
       // Change the request to match this test case
       req.headers = {
-        authorization: 'Basic YWRtaW46Zm9v',
+        authorization: `Basic ${base64.encode('badUsername:badPassword')}`,
       };
 
       return middleware(req, res, next)
@@ -43,11 +47,11 @@ describe('Auth Middleware', () => {
 
     }); // it()
 
-    it('logs in an admin user with the right credentials', () => {
+    it('logs in an admin user with the right credentials', async () => {
 
       // Change the request to match this test case
       req.headers = {
-        authorization: 'Basic YWRtaW46cGFzc3dvcmQ=',
+        authorization: `Basic ${base64.encode(authString)}`,
       };
 
       return middleware(req, res, next)
