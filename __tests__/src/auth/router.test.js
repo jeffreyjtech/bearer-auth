@@ -1,10 +1,10 @@
 'use strict';
 
-process.env.SECRET = "toes";
+process.env.SECRET = 'toes';
 
 const supertest = require('supertest');
 const server = require('../../../src/server.js').server;
-const { db } = require('../../../src/auth/models/index.js');
+// const { db } = require('../../../src/auth/models/index.js');
 
 const mockRequest = supertest(server);
 
@@ -28,7 +28,7 @@ describe('Auth Router', () => {
         expect(response.status).toBe(201);
         expect(userObject.token).toBeDefined();
         expect(userObject.user.id).toBeDefined();
-        expect(userObject.user.username).toEqual(users[userType].username)
+        expect(userObject.user.username).toEqual(users[userType].username);
         done();
       });
 
@@ -41,7 +41,7 @@ describe('Auth Router', () => {
         expect(response.status).toBe(200);
         expect(userObject.token).toBeDefined();
         expect(userObject.user.id).toBeDefined();
-        expect(userObject.user.username).toEqual(users[userType].username)
+        expect(userObject.user.username).toEqual(users[userType].username);
         done();
       });
 
@@ -56,7 +56,7 @@ describe('Auth Router', () => {
         // First, use basic to login to get a token
         const bearerResponse = await mockRequest
           .get('/users')
-          .set('Authorization', `Bearer ${token}`)
+          .set('Authorization', `Bearer ${token}`);
 
         // Not checking the value of the response, only that we "got in"
         expect(bearerResponse.status).toBe(200);
@@ -69,7 +69,7 @@ describe('Auth Router', () => {
       it('basic fails with known user and wrong password ', async (done) => {
 
         const response = await mockRequest.post('/signin')
-          .auth('admin', 'xyz')
+          .auth('admin', 'xyz');
         const userObject = response.body;
 
         expect(response.status).toBe(403);
@@ -81,12 +81,12 @@ describe('Auth Router', () => {
       it('basic fails with unknown user', async (done) => {
 
         const response = await mockRequest.post('/signin')
-          .auth('nobody', 'xyz')
+          .auth('nobody', 'xyz');
         const userObject = response.body;
 
         expect(response.status).toBe(403);
         expect(userObject.user).not.toBeDefined();
-        expect(userObject.token).not.toBeDefined()
+        expect(userObject.token).not.toBeDefined();
         done();
       });
 
@@ -95,13 +95,13 @@ describe('Auth Router', () => {
         // First, use basic to login to get a token
         const bearerResponse = await mockRequest
           .get('/users')
-          .set('Authorization', `Bearer foobar`)
+          .set('Authorization', `Bearer foobar`);
 
         // Not checking the value of the response, only that we "got in"
         expect(bearerResponse.status).toBe(403);
         done();
-      })
-    })
+      });
+    });
 
   });
 
