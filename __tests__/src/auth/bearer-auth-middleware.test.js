@@ -7,7 +7,7 @@ const { users } = require('../../../src/auth/models/index.js');
 const jwt = require('jsonwebtoken');
 
 let userInfo = {
-  admin: { username: 'admin-basic', password: 'password' },
+  admin: { username: 'admin-bearer', password: 'password' },
 };
 
 // Pre-load our database with fake users
@@ -44,7 +44,7 @@ describe('Auth Middleware', () => {
 
     it('logs in a user with a proper token', () => {
 
-      const user = { username: 'admin-basic' };
+      const user = {username: userInfo.admin.username};
       const token = jwt.sign(user, SECRET);
 
       req.headers = {
