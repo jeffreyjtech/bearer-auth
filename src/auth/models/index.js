@@ -7,7 +7,7 @@ const userSchema = require('./users.js');
 let DATABASE_URL = '';
 switch (process.env.NODE_ENV) {
 case 'test':
-  DATABASE_URL = 'sqlite:memory:';
+  DATABASE_URL = 'sqlite:memory';
   break;
 
 case 'development':
@@ -26,7 +26,12 @@ const DATABASE_CONFIG = process.env.NODE_ENV === 'production' ? {
   },
 } : {};
 
+// console.log('DB CONFIG:\n ',DATABASE_CONFIG);
+// console.log('DB URL:\n ',DATABASE_URL);
+
 const sequelize = new Sequelize(DATABASE_URL, DATABASE_CONFIG);
+
+// console.log('UserSchema create:\n ', userSchema(sequelize, DataTypes));
 
 module.exports = {
   db: sequelize,
