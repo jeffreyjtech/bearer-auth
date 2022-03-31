@@ -5,7 +5,6 @@ const { users } = require('../models/index.js');
 
 module.exports = async (req, res, next) => {
 
-  // if (!req.headers.authorization) { return _authError(); }
   try {
 
     let basic = req.headers.authorization;
@@ -18,7 +17,6 @@ module.exports = async (req, res, next) => {
 
     req.user = await users.authenticateBasic(username, password);
 
-    // if (!req.user) throw new Error;
 
     next();
   } catch (e) {
