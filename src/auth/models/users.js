@@ -2,6 +2,7 @@
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
 
 const userSchema = (sequelize, DataTypes) => {
   let model = sequelize.define('User', {
@@ -10,8 +11,16 @@ const userSchema = (sequelize, DataTypes) => {
     token: {
       type: DataTypes.VIRTUAL,
       get() {
-        return jwt.sign({ username: this.username }, process.env.SECRET);
+        const payload =
+          process.env.TOKEN_SINGLE_USE === 'true'
+            ? { username: this.username, jti: crypto.randomUUID() }
+            : { username: this.username };
+        return jwt.sign(payload, process.env.SECRET);
       },
+    },
+    usedTokenUUIDs: {
+      type: DataTypes.STRING,
+      defaultValue: ' ',
     },
   });
 
@@ -20,7 +29,7 @@ const userSchema = (sequelize, DataTypes) => {
     user.password = hashedPass;
   });
 
-  // Basic AUTH: Validating strings (username, password) 
+  // Basic AUTH: Validating strings (username, password)
   model.authenticateBasic = async function (username, password) {
     const user = await this.findOne({ where: { username } });
     const valid = await bcrypt.compare(password, user.password);
@@ -30,9 +39,28 @@ const userSchema = (sequelize, DataTypes) => {
 
   // Bearer AUTH: Validating a token
   model.authenticateToken = async function (token) {
-    const parsedToken = jwt.verify(token, process.env.SECRET);
-    const user = await this.findOne({ where: { username: parsedToken.username }});
+    let verifyOptions = {};
+    if (process.env.TOKEN_EXPIRATION === 'true') {
+      let tokenAge = process.env.NODE_ENV === 'test' ? 2 : 60 * 10;
+      verifyOptions.maxAge = tokenAge;
+    }
+    const parsedToken = jwt.verify(token, process.env.SECRET, verifyOptions);
+    const user = await this.findOne({
+      where: { username: parsedToken.username },
+    });
     if (!user) throw new Error('User Not Found');
+
+    if (process.env.TOKEN_SINGLE_USE === 'true') {
+      if (user.usedTokenUUIDs.includes(parsedToken.jti)) {
+        throw new Error('Single-Use Token Already Used');
+      } else {
+        await this.update(
+          { usedTokenUUIDs: `${user.usedTokenUUIDs} ${parsedToken.jti}` },
+          { where: { username: parsedToken.username } },
+        );
+      }
+    }
+
     return user;
   };
 
