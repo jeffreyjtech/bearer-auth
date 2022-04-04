@@ -4,8 +4,9 @@ This API is able to handle users signing up, signing in, and verifying the integ
 
 [Deployed API](https://jjtech-bearer-auth.herokuapp.com/)
 
-<!-- Insert UML diagram here -->
-![UML Diagram](./assets/lab-uml.jpg)
+## UML Diagram
+
+![UML Diagram](./assets/lab-7-uml.jpg)
 
 ## Installation
 
@@ -48,14 +49,12 @@ Token security can be enhanced with the following options:
     - status `200`, and a JSON body which is the `user` record which matches the given username and password.
     - status `403`, if auth string is invalid.
 
-- POST : `/users`
+- GET : `/users`
   - Required: Authorization header
     - Requires a `Bearer` authorization header containing a valid sign-in token.
   - Response
     - status `200`, and a JSON body of all the usernames present in the `users` table.
     - status `403`, if sign-in token is invalid.
-
-#### `/users` route
 
 ### Schemas
 
