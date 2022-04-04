@@ -62,9 +62,9 @@ Token security can be enhanced with the following options:
 
 ```js
 {
-  username:: "testUser", // Required and must be unique
-  password:: "secret" // Required
-  token: "<jwt-signed-token>" // A generated jwt created on get and set in combination with a secret.
+  username: "testUser", // Required and must be unique
+  password: "secret", // Required
+  token: "<jwt-signed-token>", // A generated jwt created on get and set in combination with a secret.
   usedTokenUUIDs: "<concatenated string of token UUID>" // A list of used Token UUIDs, used to enforce single-use tokens.
 }
 ```
